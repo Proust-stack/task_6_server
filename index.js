@@ -22,7 +22,35 @@ const start = async () => {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    app.listen(PORT, () => console.log(`Server started on port ${PORT}`));
+    const server = app.listen(PORT, () =>
+      console.log(`Server started on port ${PORT}`)
+    );
+    const io = socket(server, {
+      cors: {
+        origin: "http://localhost:3000",
+        credentials: true,
+      },
+    });
+
+    global.onlineUsers = new Map();
+    io.on("connection", (socket) => {
+      console.log("a user connected");
+      socket.on("disconnect", () => {
+        console.log("user disconnected");
+      });
+      global.chatSocket = socket;
+      socket.on("add-user", (userId) => {
+        onlineUsers.set(userId, socket.id);
+      });
+
+      socket.on("send-msg", (data) => {
+        const sendUserSocket = onlineUsers.get(data.to);
+        console.log(sendUserSocket);
+        if (sendUserSocket) {
+          socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+        }
+      });
+    });
   } catch (e) {
     console.log(e);
   }
