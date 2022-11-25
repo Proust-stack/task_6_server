@@ -7,8 +7,6 @@ const userSchema = new mongoose.Schema({
     max: 20,
     min: 1,
   },
-  inbox: Array,
-  outbox: Array,
 });
 
 module.exports = mongoose.model("User", userSchema);

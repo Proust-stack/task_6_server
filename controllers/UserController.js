@@ -14,7 +14,7 @@ class UserController {
       }
       res.status(200).json(user.name);
     } catch (error) {
-      res.json({ status: "error" });
+      res.status(500);
     }
   }
 
