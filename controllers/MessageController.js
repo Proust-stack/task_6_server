@@ -1,5 +1,4 @@
-const Message = require("../models/messageModel");
-const User = require("../models/userModel");
+const Message = require("../models/MessageModel");
 
 class MessageController {
   async createNewMessage(req, res, next) {
